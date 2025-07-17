@@ -1,0 +1,42 @@
+<p-tabView id="closableTabView">
+  @for (tab of requestTabs; track $index) {
+  <p-tabPanel [header]="tab.name ?? ''" [selected]="true" [closable]="tab.closable">
+    <p-dropdown 
+    [options]="requestTypeList" 
+    [(ngModel)]="tab.reqType" 
+    optionLabel="name" 
+    placeholder="Select a Type" />
+    <input type="text" pInputText [(ngModel)]="tab.Url" />
+    <div class="card">
+      <p-tabView (onChange)="onSubTabChange($event)">
+  @for (section of tabSections; track section.label) {
+    <p-tabPanel [header]="section.label">
+        <ng-container [ngSwitch]="activeSubTab">
+        <ng-container *ngSwitchCase="'Params'">
+          <!-- Params UI -->
+        </ng-container>
+        <ng-container *ngSwitchCase="'Authorization'">
+          <!-- Authorization UI -->
+        </ng-container>
+        <ng-container *ngSwitchCase="'Headers'">
+          <!-- Headers UI -->
+        </ng-container>
+        <ng-container *ngSwitchCase="'Body'">
+          <div style="width: 300px; height: 300px" *ngIf="tab.body?.length">
+            <app-editor
+              [editorOptions]="editorOptions"
+              [code]="tab.body ?? ''"
+            ></app-editor>
+          </div>
+        </ng-container>
+      </ng-container>
+    </p-tabPanel>
+  }
+</p-tabView>
+
+    </div>
+  </p-tabPanel>
+  }
+</p-tabView>
+
+

@@ -1,17 +1,30 @@
-<p-tabView id="closableTabView">
-  @for (tab of requestTabs; track $index) {
-  <p-tabPanel [header]="tab.name ?? ''" [selected]="true" [closable]="tab.closable">
-    <p-dropdown 
-    [options]="requestTypeList" 
-    [(ngModel)]="tab.reqType" 
-    optionLabel="name" 
-    placeholder="Select a Type" />
-    <input type="text" pInputText [(ngModel)]="tab.Url" />
-    <div class="card">
-      <p-tabView (onChange)="onSubTabChange($event)">
-  @for (section of tabSections; track section.label) {
+<p-tabView [(activeIndex)]="activeTabIndex" (onChange)="onTabChange($event)" (onClose)="onTabClose($event)">
+  <p-tabView [(activeIndex)]="activeTabIndex" [scrollable]="true">
+    <p-tabPanel
+      *ngFor="let tab of requestTabs"
+      [header]="tab.name ?? ''"
+      [closable]="true"
+    >
+    </p-tabPanel>
+  </p-tabView>
+</p-tabView>
+
+<p-dropdown
+  [options]="requestTypeList"
+  [(ngModel)]="activeTab.reqType"
+  appendTo="Body"
+/>
+<input type="text" pInputText [(ngModel)]="activeTab.Url" style="width: 50%" />
+<p-splitButton
+  label="Send"
+  (onClick)="sendHttpRequest('info')"
+  [model]="items"
+/>
+<div class="card">
+  <p-tabView (onChange)="onSubTabChange($event)">
+    @for (section of tabSections; track section.label) {
     <p-tabPanel [header]="section.label">
-        <ng-container [ngSwitch]="activeSubTab">
+      <ng-container [ngSwitch]="activeSubTab">
         <ng-container *ngSwitchCase="'Params'">
           <!-- Params UI -->
         </ng-container>
@@ -22,21 +35,27 @@
           <!-- Headers UI -->
         </ng-container>
         <ng-container *ngSwitchCase="'Body'">
-          <div style="width: 300px; height: 300px" *ngIf="tab.body?.length">
+          <div
+            style="width: 300px; height: 300px"
+            *ngIf="activeTab.body?.length"
+          >
             <app-editor
               [editorOptions]="editorOptions"
-              [code]="tab.body ?? ''"
+              [code]="activeTab.body ?? ''"
             ></app-editor>
           </div>
         </ng-container>
       </ng-container>
     </p-tabPanel>
-  }
-</p-tabView>
+    }
+  </p-tabView>
+</div>
 
-    </div>
-  </p-tabPanel>
-  }
-</p-tabView>
-
-
+<div>
+  <div style="width: 1000px; height: 600px" *ngIf="activeTab.body?.length">
+    <app-editor
+      [editorOptions]="editorOptions"
+      [code]="activeTab.response ?? ''"
+    ></app-editor>
+  </div>
+</div>

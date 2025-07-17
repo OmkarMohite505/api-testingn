@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import * as monaco from 'monaco-editor';
 
 @Component({
   selector: 'app-editor',
@@ -9,15 +10,24 @@ export class EditorComponent {
   @Input() code!: string;
   @Input() editorOptions: any;
   @Output() codeChanged = new EventEmitter<string>();
-  // editorOptions = {theme: 'vs-dark', language: 'javascript'};
-  // code: string= 'function x() {\nconsole.log("Hello world!");\n}';
+  
+  private editorInstance!: monaco.editor.IStandaloneCodeEditor;
 
   onCodeChanged(value: any) {
-    // console.log('CODE', value);
+    this.formatEditor();
   }
 
   onValueChange(value: string){
     this.code = value; // Update the local variable if needed
     this.codeChanged.emit(this.code);
+    this.formatEditor();
+  }
+  onEditorInit(editor: monaco.editor.IStandaloneCodeEditor) {
+    this.editorInstance = editor;
+  }
+  formatEditor() {
+    if (this.editorInstance) {
+      this.editorInstance.getAction('editor.action.formatDocument')?.run();
+    }
   }
 }

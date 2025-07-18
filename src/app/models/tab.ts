@@ -3,17 +3,28 @@ import { RequestType } from "./RequestType";
 export interface Tab {
     id: number;
     name?: string;
-    reqType: string;
-    Url: string;
-    body?: string;
-    headers?: string;
-    params?: KeyValuePair[];
     closable?: boolean;
-    response?: any;
-    errors?: any;
+    response: Response;
+    request: Request;
 }
 
 export interface KeyValuePair {
   key: string;
   value: string;
+}
+
+export interface Response{
+  body: any;
+  headers?: any;
+  status?: number;
+  statusText?: string;
+}
+
+export interface Request{
+  url: string;
+  reqType: string;
+  body?: any;
+  headers?: any;
+  params?: KeyValuePair[];
+  contentType?: any;
 }

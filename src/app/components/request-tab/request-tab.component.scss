@@ -1,0 +1,54 @@
+/* Global layout: left menu + right content */
+:host {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+/* Left vertical panel menu */
+.lft-side-ver-panel-menu {
+  width: 250px;
+  background-color: #f8f9fa;
+  border-right: 1px solid #ddd;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+/* Main content area */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  overflow: auto;
+}
+
+/* Horizontal tab row at the top */
+.horizontal-main-tabs {
+  flex-shrink: 0;
+  margin-bottom: 1rem;
+}
+
+/* Second row: dropdown + input + split button */
+.horizontal-second-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+/* Sub-tab area */
+.hor-sub-tab-sec-row {
+  flex-shrink: 0;
+  margin-bottom: 1rem;
+}
+
+/* Response section editor */
+.response-area {
+  flex-grow: 1;
+  overflow: auto;
+  border-top: 1px solid #ccc;
+  padding-top: 1rem;
+}

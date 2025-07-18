@@ -36,12 +36,11 @@
         </ng-container>
         <ng-container *ngSwitchCase="'Body'">
           <div
-            style="width: 300px; height: 300px"
-            *ngIf="activeTab.body?.length"
-          >
+            style="width: 600px; height: 300px">
             <app-editor
               [editorOptions]="editorOptions"
               [code]="activeTab.body ?? ''"
+              (codeChanged)="onBodyChange($event)"
             ></app-editor>
           </div>
         </ng-container>
@@ -52,10 +51,11 @@
 </div>
 
 <div>
-  <div style="width: 1000px; height: 600px" *ngIf="activeTab.body?.length">
+  <div style="width: 1000px; height: 600px">
     <app-editor
       [editorOptions]="editorOptions"
       [code]="activeTab.response ?? ''"
+      [isFormatEditor]="true"
     ></app-editor>
   </div>
 </div>

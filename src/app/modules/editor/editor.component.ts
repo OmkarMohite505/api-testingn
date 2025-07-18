@@ -9,6 +9,7 @@ import * as monaco from 'monaco-editor';
 export class EditorComponent {
   @Input() code!: string;
   @Input() editorOptions: any;
+  @Input() isFormatEditor: boolean = false;
   @Output() codeChanged = new EventEmitter<string>();
   
   private editorInstance!: monaco.editor.IStandaloneCodeEditor;
@@ -26,7 +27,7 @@ export class EditorComponent {
     this.editorInstance = editor;
   }
   formatEditor() {
-    if (this.editorInstance) {
+    if (this.isFormatEditor && this.editorInstance) {
       this.editorInstance.getAction('editor.action.formatDocument')?.run();
     }
   }

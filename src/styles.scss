@@ -1,1 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+
+.p-tabview .p-tabview-panels{
+    padding: 0.2rem !important;
+}
+
+.p-tabview .p-tabview-nav li .p-tabview-nav-link{
+    padding: 0.55rem;
+}

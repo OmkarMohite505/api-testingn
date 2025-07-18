@@ -49,7 +49,7 @@ export class RequestTabComponent implements OnInit {
       name: 'State List',
       reqType: 'GET',
       Url: 'https://',
-      body: 'sdjhskdfhsdfjk\n\n',
+      body: '{\n\n}',
       headers: '',
       params: [{ key: '', value: '' }],
       closable: true,
@@ -116,7 +116,18 @@ export class RequestTabComponent implements OnInit {
             this.activeTab.response = JSON.stringify(res);
           },
           error: (err) => {
-            this.activeTab.errors = err;
+            this.activeTab.response = JSON.stringify(err);
+          }
+        });
+        break;
+      
+      case 'POST':
+        this.apiService.post(this.activeTab.Url, this.activeTab.body).subscribe({
+          next: (res) => {
+            this.activeTab.response = JSON.stringify(res);
+          },
+          error: (err) => {
+            this.activeTab.response = JSON.stringify(err);
           }
         })
     }
@@ -125,6 +136,10 @@ export class RequestTabComponent implements OnInit {
 
   sendHttpRequestAndDownload(){
 
+  }
+
+  onBodyChange(event: any){
+    this.activeTab.body = event;
   }
 
 }

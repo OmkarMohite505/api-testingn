@@ -1,0 +1,24 @@
+<div class="auth-wrapper">
+  <label for="authType">Auth Type</label>
+  <p-dropdown
+    id="authType"
+    [options]="authTypes"
+    [(ngModel)]="authType"
+    (onChange)="onAuthTypeChange($event.value)"
+    placeholder="Select Auth Type"
+    styleClass="w-full"
+  ></p-dropdown>
+
+  <div *ngIf="isBearerTokenSelected()" class="token-input mt-3">
+    <label for="token">Token</label>
+    <input
+      id="token"
+      type="text"
+      pInputText
+      [(ngModel)]="token"
+      (change)="onTokenChange($event)"
+      placeholder="Enter Bearer Token"
+      styleClass="w-full"
+    />
+  </div>
+</div>

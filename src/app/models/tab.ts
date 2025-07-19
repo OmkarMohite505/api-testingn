@@ -1,7 +1,7 @@
 import { RequestType } from "./RequestType";
 
 export interface Tab {
-    id: number;
+    id: string;
     name?: string;
     closable?: boolean;
     response: Response;

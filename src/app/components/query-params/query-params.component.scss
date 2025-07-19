@@ -1,0 +1,27 @@
+:host {
+  display: block;
+  margin: 1rem;
+}
+
+.mt-2 {
+  margin-top: 1rem;
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.custom-table th,
+.custom-table td {
+  border: 1px solid #ccc;
+  padding: 0.25rem;
+  vertical-align: middle;
+}
+
+.full-width-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.25rem 0.4rem;
+}
+

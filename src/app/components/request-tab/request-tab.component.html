@@ -5,12 +5,7 @@
 
 <div class="main-content">
 <div class="horizontal-main-tabs">
-  <p-tabView
-    [(activeIndex)]="activeTabIndex"
-    (onChange)="onTabChange($event)"
-    (onClose)="onTabClose($event)"
-  >
-    <p-tabView [(activeIndex)]="activeTabIndex" [scrollable]="true">
+    <p-tabView [(activeIndex)]="activeTabIndex" [scrollable]="true" (onChange)="onTabChange($event)" (onClose)="onTabClose($event)">
       <p-tabPanel
         *ngFor="let tab of requestTabs"
         [header]="tab.name ?? ''"
@@ -18,8 +13,11 @@
       >
       </p-tabPanel>
     </p-tabView>
-  </p-tabView>
 </div>
+<i class="pi pi-plus" (click)="createNewEmptyReqTab()" style="    width: fit-content;
+    top: 1rem;
+    position: absolute;
+    left: 15rem; cursor: pointer;"></i>
 
 <div class="horizontal-second-row">
   <p-dropdown
@@ -31,27 +29,34 @@
     type="text"
     pInputText
     [(ngModel)]="activeTab.request.url"
-    style="width: 50%"
+    style="width: 65%"
   />
   <p-splitButton
     label="Send"
     (onClick)="sendHttpRequest('info')"
     [model]="items"
+    [style]="{ 'font-size': '0.85rem', 'padding': '0.25rem 0.8rem', 'height': '3.0rem', 'width': '8rem' }"
   />
   <p-splitButton
     label="Save"
     (onClick)="saveReqTabInCollection()"
-    [model]="items"
+    [style]="{ 'font-size': '0.85rem', 'padding': '0.25rem 0.8rem', 'height': '3.0rem', 'width': '8rem' }"
   />
 </div>
 <div class="hor-sub-tab-sec-row">
   <p-tabView (onChange)="onSubTabChange($event)">
     @for (section of tabSections; track section.label) {
-    <p-tabPanel [header]="section.label">
+    <p-tabPanel [header]="section.label" style="height: 14rem;">
       <ng-container [ngSwitch]="activeSubTab">
-        <ng-container *ngSwitchCase="'Params'"> </ng-container>
-        <ng-container *ngSwitchCase="'Authorization'"> </ng-container>
-        <ng-container *ngSwitchCase="'Headers'"> </ng-container>
+        <ng-container *ngSwitchCase="'Params'"> 
+          <app-query-params (queryParamsChange)="onParamsChange($event)"></app-query-params>
+        </ng-container>
+        <ng-container *ngSwitchCase="'Authorization'"> 
+          <app-authorization (authChange)="onAuthChanged($event)"></app-authorization>
+        </ng-container>
+        <ng-container *ngSwitchCase="'Headers'"> 
+           <app-headers (queryParamsChange)="onHeadersChange($event)"></app-headers>
+        </ng-container>
         <ng-container *ngSwitchCase="'Body'">
           <div style="width: 600px; height: 300px">
             <app-editor

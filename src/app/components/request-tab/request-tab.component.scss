@@ -20,14 +20,13 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 1rem;
+  padding: 0rem 0rem 0rem 1rem;
   overflow: auto;
 }
 
 /* Horizontal tab row at the top */
 .horizontal-main-tabs {
   flex-shrink: 0;
-  margin-bottom: 1rem;
 }
 
 /* Second row: dropdown + input + split button */
@@ -36,13 +35,13 @@
   align-items: center;
   gap: 1rem;
   flex-wrap: wrap;
-  margin-bottom: 1rem;
 }
 
 /* Sub-tab area */
 .hor-sub-tab-sec-row {
   flex-shrink: 0;
   margin-bottom: 1rem;
+  height: 15rem;
 }
 
 /* Response section editor */

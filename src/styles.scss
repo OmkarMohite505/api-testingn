@@ -22,4 +22,48 @@
          padding: 0.5rem !important;
          margin-left: 2rem;
     }
+    .p-datatable .p-datatable-thead > tr > th{
+        padding: 0.1rem;
+    }
+}
+
+.lft-side-ver-panel-menu{
+    .p-element .p-icon-wrapper{
+        margin-bottom: 0rem;
+    }
+    .p-panelmenu .p-panelmenu-header .p-panelmenu-header-content .p-panelmenu-header-action{
+        padding: 0.45rem 0.45rem 0.45rem 0rem;
+    }
+    .p-panelmenu .p-panelmenu-content .p-menuitem > .p-menuitem-content .p-menuitem-link{
+        padding: 0.45rem 0.5rem;
+    }
+    .p-panelmenu .p-panelmenu-content{
+        padding: 0rem;
+    }
+    .p-menuitem-link.ng-tns-c1818545701-7.ng-star-inserted{
+        margin-left: 1.5rem;
+    }
+}
+
+.horizontal-second-row{
+    p-splitbutton{
+        button{
+            .p-element.p-icon-wrapper{
+                margin-bottom: 0rem;
+            }
+        }
+    }
+}
+
+.main-content{
+    .horizontal-main-tabs{
+        a{
+            timesicon{
+                margin-right: 0.5rem;
+                svg{
+                    height: 0.7rem;
+                }
+            }
+        }
+    }
 }

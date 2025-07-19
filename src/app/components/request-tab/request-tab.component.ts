@@ -12,6 +12,9 @@ import { MenuItem } from 'primeng/api';
 import { ApiService } from '../../services/api.service';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { DialogModule } from 'primeng/dialog';
+import { QueryParamsComponent } from '../query-params/query-params.component';
+import { AuthorizationComponent } from '../authorization/authorization.component';
+import { HeadersComponent } from "../headers/headers.component";
 
 @Component({
   selector: 'app-request-tab',
@@ -25,8 +28,11 @@ import { DialogModule } from 'primeng/dialog';
     DropdownModule,
     SplitButtonModule,
     PanelMenuModule,
-    DialogModule
-  ],
+    DialogModule,
+    QueryParamsComponent,
+    AuthorizationComponent,
+    HeadersComponent
+],
   templateUrl: './request-tab.component.html',
   styleUrl: './request-tab.component.scss',
 })
@@ -43,6 +49,8 @@ export class RequestTabComponent implements OnInit {
   requestTypeList: any[] = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
   activeSubTab: string = 'Params';
   activeTabIndex: number = 0;
+  activeCollectionFolder: string = '';
+  activeCollectionFile: string = '';
   items: MenuItem[] = [];
   collectionItems!: MenuItem[];
   collectionsList: any[] = [];
@@ -55,10 +63,10 @@ export class RequestTabComponent implements OnInit {
 
   requestTabs: Tab[] = [
     {
-      id: 0,
-      name: 'State List',
+      id: new Date().getMilliseconds().toString(),
+      name: 'New Request',
       closable: true,
-      request : {url: '', reqType: this.requestTypeList[0]},
+      request : {url: 'https://cdn-api.co-vin.in/api/v2/admin/location/states', reqType: this.requestTypeList[0]},
       response: {body: ''}
     }
   ];
@@ -77,12 +85,13 @@ export class RequestTabComponent implements OnInit {
             {
                 id: new Date().getMilliseconds().toString(),
                 label: 'Default',
-                icon: 'pi pi-file',
+                command: (event) => this.onCollectionFolderClick(event),
                 items: [
                     {
                         id: new Date().getMilliseconds().toString(),
-                        label: 'Get Districts',
-                        icon: 'pi pi-file',
+                        label: 'New Request',
+                        command: (event) => this.onCollectionFileClick(event),
+                        requestTab: this.activeTab
                     }
                 ]
             }
@@ -90,6 +99,16 @@ export class RequestTabComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    let ob = localStorage.getItem('collections');
+    if(ob){
+      this.collectionItems = JSON.parse(ob);
+      this.collectionItems.forEach(folder => {
+        folder.command = (event) => this.onCollectionFolderClick(event);
+        folder.items?.forEach(file => {
+          file.command = (event) => this.onCollectionFileClick(event);
+        })
+      })
+    }
       
   }
 
@@ -111,8 +130,47 @@ export class RequestTabComponent implements OnInit {
     }
   }
 
+  onCollectionFileClick(event: any){
+    console.log(event);
+    this.activeCollectionFile = event?.item.id;
+    this.activeTab = this.collectionItems.filter(ele => ele.id === this.activeCollectionFolder)
+                      [0].items?.filter(ele => ele.id === this.activeCollectionFile)[0]?.['requestTab'] as Tab;
+    this.requestTabs.push(this.activeTab);
+    this.activeTabIndex = this.requestTabs.length - 1;
+  }
+
+  onCollectionFolderClick(event: any){
+    console.log(event);
+    this.activeCollectionFolder = event?.item.id;
+  }
+
+  createNewEmptyReqTab(){
+    this.requestTabs.push(
+       {
+      id: new Date().getMilliseconds().toString(),
+      name: 'New Request',
+      closable: true,
+      request : {url: '', reqType: this.requestTypeList[0]},
+      response: {body: ''}
+    }
+    );
+
+    this.activeTabIndex = this.requestTabs.length - 1;
+  }
+
   onSubTabClose(event: any) {
     console.log(event);
+  }
+
+  createNewTab(){
+    let ob: Tab = {
+      id: new Date().getMilliseconds().toString(),
+      name: 'New Request',
+      closable: true,
+      request : {url: '', reqType: this.requestTypeList[0]},
+      response: {body: ''}
+    }
+    this.requestTabs.push(ob);
   }
 
   onTabChange(event: any){
@@ -126,14 +184,14 @@ export class RequestTabComponent implements OnInit {
     }
   }
   sendHttpRequest(str: any){
-    var reqTab = this.requestTabs.filter(ele => ele.id === this.activeTabIndex)[0];
+    var reqTab = this.requestTabs[this.activeTabIndex];
     this.activeTab = reqTab;
     switch(reqTab.request?.reqType)
     {
       case 'GET': 
         this.apiService.get(reqTab.request?.url as string).subscribe({
           next: (res) => {
-            if(this.activeTab.response && this.activeTab.response.body)
+            if(this.activeTab.response)
               this.activeTab.response.body = JSON.stringify(res.body);
           },
           error: (err) => {
@@ -186,15 +244,38 @@ export class RequestTabComponent implements OnInit {
           id: new Date().getMilliseconds().toString(),
           label: this.newReqTabName
         };
-        ele.items?.push(ob);
+        ele.items?.forEach(file => {
+          if(file.id === this.activeTab.id){
+            this.activeTab.name = this.newReqTabName;
+            file['requestTab'] = this.activeTab;
+            file.label = this.newReqTabName;
+          }
+        });
+        
         }
       });
-
-      this.collectionItems = JSON.parse(JSON.stringify(this.collectionItems));
+      let ob = JSON.stringify(this.collectionItems);
+      this.collectionItems = JSON.parse(ob);
+      localStorage.setItem('collections', ob);
       return;
     }
     this.collectionsList = this.collectionItems.map(ele => ({ code: ele.id, name: ele.label }));
     this.showSaveReqTabDialog = true;
   }
+
+  onParamsChange(params: any[]) {
+    console.log('Updated Params:', params);
+    // Use the emitted query parameters as needed
+  }
+
+  onAuthChanged(authData: any) {
+    console.log('Authorization Info:', authData);
+    // Example: { type: 'Bearer Token', token: 'abc123' }
+  }
+
+  onHeadersChange(event: any){
+    console.log(event);
+  }
+
 
 }

@@ -1,3 +1,4 @@
+import { HttpHeaders, HttpParams } from "@angular/common/http";
 import { RequestType } from "./RequestType";
 
 export interface Tab {
@@ -24,7 +25,7 @@ export interface Request{
   url: string;
   reqType: string;
   body?: any;
-  headers?: any;
-  params?: KeyValuePair[];
+  headers?: HttpHeaders;
+  params?: HttpParams;
   contentType?: any;
 }

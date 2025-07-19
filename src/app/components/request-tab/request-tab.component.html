@@ -55,7 +55,7 @@
           <app-authorization (authChange)="onAuthChanged($event)"></app-authorization>
         </ng-container>
         <ng-container *ngSwitchCase="'Headers'"> 
-           <app-headers (queryParamsChange)="onHeadersChange($event)"></app-headers>
+           <app-headers (headersChange)="onHeadersChange($event)"></app-headers>
         </ng-container>
         <ng-container *ngSwitchCase="'Body'">
           <div style="width: 600px; height: 300px">

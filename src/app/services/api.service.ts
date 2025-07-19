@@ -9,8 +9,8 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  get<T>(url: string, params?: HttpParams | {[param: string]: string | number | boolean}): Observable<HttpResponse<T>> {
-    return this.http.get<T>(url, { params, observe: 'response' });
+  get<T>(url: string, params?: HttpParams | {[param: string]: string | number | boolean}, headers?: HttpHeaders): Observable<HttpResponse<T>> {
+    return this.http.get<T>(url, {headers, params, observe: 'response' });
   }
 
   post<T>(url: string, body: any, headers?: HttpHeaders): Observable<HttpResponse<T>> {

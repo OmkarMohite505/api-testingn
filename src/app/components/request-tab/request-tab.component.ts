@@ -15,6 +15,7 @@ import { DialogModule } from 'primeng/dialog';
 import { QueryParamsComponent } from '../query-params/query-params.component';
 import { AuthorizationComponent } from '../authorization/authorization.component';
 import { HeadersComponent } from "../headers/headers.component";
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-request-tab',
@@ -145,25 +146,7 @@ export class RequestTabComponent implements OnInit {
   }
 
   createNewEmptyReqTab(){
-    this.requestTabs.push(
-       {
-      id: new Date().getMilliseconds().toString(),
-      name: 'New Request',
-      closable: true,
-      request : {url: '', reqType: this.requestTypeList[0]},
-      response: {body: ''}
-    }
-    );
-
-    this.activeTabIndex = this.requestTabs.length - 1;
-  }
-
-  onSubTabClose(event: any) {
-    console.log(event);
-  }
-
-  createNewTab(){
-    let ob: Tab = {
+   let ob: Tab = {
       id: new Date().getMilliseconds().toString(),
       name: 'New Request',
       closable: true,
@@ -171,6 +154,12 @@ export class RequestTabComponent implements OnInit {
       response: {body: ''}
     }
     this.requestTabs.push(ob);
+
+    this.activeTabIndex = this.requestTabs.length - 1;
+  }
+
+  onSubTabClose(event: any) {
+    console.log(event);
   }
 
   onTabChange(event: any){
@@ -189,7 +178,7 @@ export class RequestTabComponent implements OnInit {
     switch(reqTab.request?.reqType)
     {
       case 'GET': 
-        this.apiService.get(reqTab.request?.url as string).subscribe({
+        this.apiService.get(reqTab.request?.url as string, reqTab.request.params, reqTab.request.headers).subscribe({
           next: (res) => {
             if(this.activeTab.response)
               this.activeTab.response.body = JSON.stringify(res.body);
@@ -265,17 +254,45 @@ export class RequestTabComponent implements OnInit {
 
   onParamsChange(params: any[]) {
     console.log('Updated Params:', params);
+    let queryString = '';
+    params.forEach((ele, index) => {
+      if(index === 0){
+        queryString = '?' + ele.key + '=' + ele.value;
+      }else{
+        if(ele.key?.length || ele.value?.length)
+          queryString += '&' + ele.key + '=' + ele.value;
+      }
+    })
+    let url = this.activeTab.request.url.split('?')[0];
+    this.activeTab.request.url = url + queryString;
     // Use the emitted query parameters as needed
   }
 
   onAuthChanged(authData: any) {
     console.log('Authorization Info:', authData);
-    // Example: { type: 'Bearer Token', token: 'abc123' }
+    if(this.activeTab.request.headers){
+      this.activeTab.request.headers.set('Authorization', authData?.token);
+    }else{
+      let headers = new HttpHeaders();
+      headers.set('Authorization', authData?.token);
+      this.activeTab.request.headers = headers;
+    }
   }
 
-  onHeadersChange(event: any){
+  onHeadersChange(event: any[]){
     console.log(event);
+    this.activeTab.request.headers = this.buildHttpHeaders(event);
   }
+
+  buildHttpHeaders(headerArray: { key: string; value: string }[]): HttpHeaders {
+  let headers = new HttpHeaders();
+  for (const item of headerArray) {
+    if (item.key && item.value) {
+      headers = headers.set(item.key, item.value);
+    }
+  }
+  return headers;
+}
 
 
 }

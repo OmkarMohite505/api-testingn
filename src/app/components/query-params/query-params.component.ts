@@ -5,6 +5,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-query-params',
@@ -38,7 +39,7 @@ export class QueryParamsComponent {
       value: ['']
     });
 
-    paramGroup.valueChanges.subscribe(() => {
+    paramGroup.valueChanges.pipe(debounceTime(0)).subscribe(() => {
       this.emitChanges();
     });
 

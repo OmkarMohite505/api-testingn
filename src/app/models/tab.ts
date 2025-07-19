@@ -3,10 +3,12 @@ import { RequestType } from "./RequestType";
 
 export interface Tab {
     id: string;
-    name?: string;
+    parentId?: string;
+    label?: string;
     closable?: boolean;
     response: Response;
     request: Request;
+    isSaved: boolean;
 }
 
 export interface KeyValuePair {

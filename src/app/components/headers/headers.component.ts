@@ -32,6 +32,7 @@ export class HeadersComponent {
     }
   
     addHeader() {
+      const index = this.headers.length;
       const headerGroup = this.fb.group({
         enabled: [true],
         key: [''],
@@ -40,6 +41,9 @@ export class HeadersComponent {
   
       headerGroup.valueChanges.subscribe(() => {
         this.emitChanges();
+        if (this.headers.value.length === index + 1) {
+        this.addHeader(); // Automatically add next empty row when last row is typed into
+      }
       });
   
       this.headers.push(headerGroup);

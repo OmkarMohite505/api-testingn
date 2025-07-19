@@ -51,3 +51,11 @@
   border-top: 1px solid #ccc;
   padding-top: 1rem;
 }
+
+:host ::ng-deep .p-dropdown-panel {
+  min-width: 18rem !important;
+}
+
+:host ::ng-deep .p-panelmenu-content .p-menuitem-text {
+  margin-left: 1.5rem !important;
+}

@@ -39,10 +39,14 @@ export class QueryParamsComponent {
       value: ['']
     });
 
+    const index = this.params.length;
+
     paramGroup.valueChanges.pipe(debounceTime(0)).subscribe(() => {
       this.emitChanges();
+      if (this.params.value.length === index + 1) {
+        this.addParam(); // Automatically add next empty row when last row is typed into
+      }
     });
-
     this.params.push(paramGroup);
     this.emitChanges();
   }
